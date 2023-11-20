@@ -561,7 +561,9 @@ public class UserProcess {
 			Lib.assertNotReached("Unexpected exception");
 		}
 	}
-
+	/*User Code - array of file descriptors*/
+	protected OpenFile[] fileDescArray;
+	
 	/** The program being run by this process. */
 	protected Coff coff;
 
