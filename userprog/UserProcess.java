@@ -489,6 +489,30 @@ public class UserProcess {
 		// Return fail
 		return -1;
 	}
+	private int handleOpen(int address) {
+		//checks if the address is valid
+		String filename = readVirtualMemoryString(address,256);
+		if(filename == null) {
+			return -1;
+		}
+		int fileDescriptor = 0;
+		//check if there is a file Descriptor available
+		for (int i = 0; i < fileDescArray.length; i++) {
+			if(fileDescArray[i] == null) {
+				fileDescriptor = i;
+				break;
+			}
+		}
+		if(fileDescriptor == 0) {
+			return -1;
+		}
+		//checks if the file exist but does not create it
+		OpenFile file = ThreadedKernel.fileSystem.open(filename, false);
+		if(file == null) {
+			return -1;
+		}
+		return fileDescriptor;
+	}
 
 	public int handleSyscall(int syscall, int a0, int a1, int a2, int a3) {
 		switch (syscall) {
@@ -500,6 +524,8 @@ public class UserProcess {
 			return handleUnlink (a0); // I think a0 is the name address of the file to be deleted, please confirm. 
 		case syscallClose:
 			return handleClose(a0);
+		case syscallOpen:
+			return handleOpen(a0);
 
 		default:
 			Lib.debug(dbgProcess, "Unknown syscall " + syscall);
