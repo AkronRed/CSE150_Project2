@@ -506,13 +506,13 @@ public class UserProcess {
 		
 		// Check that the file exists
 		// If it doesn't, this is skipped and the default condition of 'error' is returned
-		if (currentFile != NULL)
+		if (currentFile != null)
 		{
 			// Close the file; appears close() in OpenFile.java is the way to do it
 			currentFile.close();
 			
 			// Remove the fileDescriptor from the array
-			fileDescArray[fileAddress] = NULL;
+			fileDescArray[fileAddress] = null;
 			
 			// If here, then the file has been successfully closed and fileDescriptor has been cleared
 			// Return success
@@ -529,15 +529,10 @@ public class UserProcess {
 		if(filename == null) {
 			return -1;
 		}
-		int fileDescriptor = 0;
+		int fileDescriptor = -1;
 		//check if there is a file Descriptor available
-		for (int i = 0; i < fileDescArray.length; i++) {
-			if(fileDescArray[i] == null) {
-				fileDescriptor = i;
-				break;
-			}
-		}
-		if(fileDescriptor == 0) {
+		fileDescriptor = descriptorHelper(fileDescriptor);
+		if(fileDescriptor == -1) {
 			return -1;
 		}
 		//checks if the file exist but does not create it
