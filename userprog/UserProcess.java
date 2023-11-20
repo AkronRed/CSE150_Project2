@@ -453,6 +453,43 @@ public class UserProcess {
 		   return 0; // success
 		}
 
+	private int handleClose (int fileAddress) {
+		// Steven Spangler's code
+		
+		// Check to see if the fileDescriptor is in bounds
+		if (fileAddress > 15 || fileAddress < 0)
+		{
+			// If in here, fileDescritor is out of bounds
+			// Return error
+			return -1;
+			}
+		
+		// If here, fileDescriptor is valid
+		// Get the file using the descriptor
+		// File will be called 'currentfile' because... it's the current file things are happening to
+		// Object is an 'OpenFile', dug through nachos to find that
+		OpenFile currentFile = fileDescArray[fileAddress]; 
+		
+		// Check that the file exists
+		// If it doesn't, this is skipped and the default condition of 'error' is returned
+		if (currentFile != NULL)
+		{
+			// Close the file; appears close() in OpenFile.java is the way to do it
+			currentFile.close();
+			
+			// Remove the fileDescriptor from the array
+			fileDescArray[fileAddress] = NULL;
+			
+			// If here, then the file has been successfully closed and fileDescriptor has been cleared
+			// Return success
+			return 0;
+		}
+
+		// If here, then ~something~ caused an error and above code didn't run
+		// Return fail
+		return -1;
+	}
+
 	public int handleSyscall(int syscall, int a0, int a1, int a2, int a3) {
 		switch (syscall) {
 		case syscallHalt:
@@ -461,6 +498,8 @@ public class UserProcess {
 			return handleExit(a0);
 		case syscallUnlink:
 			return handleUnlink (a0); // I think a0 is the name address of the file to be deleted, please confirm. 
+		case syscallClose:
+			return handleClose(a0)
 
 		default:
 			Lib.debug(dbgProcess, "Unknown syscall " + syscall);
