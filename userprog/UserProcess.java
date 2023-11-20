@@ -462,7 +462,7 @@ public class UserProcess {
 			// If in here, fileDescritor is out of bounds
 			// Return error
 			return -1;
-			}
+		}
 		
 		// If here, fileDescriptor is valid
 		// Get the file using the descriptor
@@ -499,7 +499,7 @@ public class UserProcess {
 		case syscallUnlink:
 			return handleUnlink (a0); // I think a0 is the name address of the file to be deleted, please confirm. 
 		case syscallClose:
-			return handleClose(a0)
+			return handleClose(a0);
 
 		default:
 			Lib.debug(dbgProcess, "Unknown syscall " + syscall);
