@@ -28,6 +28,9 @@ public class UserProcess {
 		pageTable = new TranslationEntry[numPhysPages];
 		for (int i = 0; i < numPhysPages; i++)
 			pageTable[i] = new TranslationEntry(i, i, true, false, false, false);
+
+		/*User Code - create array of file descriptors*/
+		OpenFile[] fileDescArray = new OpenFile[16];            // create array 
 	}
 
 	/**
