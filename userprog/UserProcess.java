@@ -474,6 +474,7 @@ public class UserProcess {
 		if (file == null) {													// if call to open method file fails
 			return -1;
 		}
+		fileDescArray[fileDescriptor] = file;
 		return fileDescriptor;
 		
 	}
@@ -540,6 +541,7 @@ public class UserProcess {
 		if(file == null) {
 			return -1;
 		}
+		fileDescArray[fileDescriptor] = file;
 		return fileDescriptor;
 	}
 
