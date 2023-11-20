@@ -440,12 +440,24 @@ public class UserProcess {
 	 * @param a3 the fourth syscall argument.
 	 * @return the value to be returned to the user.
 	 */
+
+	private int handleUnlink(int nameAddress) {
+		   String fileName = readVirtualMemoryString(nameAddress, 256); // the max char limit
+		   if (fileName == null) {
+		       return 1; // didn't pass in a filename
+		   }
+		   ThreadedKernel.fileSystem.remove(fileName); // default remove method
+		   return 0; // success
+		}
+
 	public int handleSyscall(int syscall, int a0, int a1, int a2, int a3) {
 		switch (syscall) {
 		case syscallHalt:
 			return handleHalt();
 		case syscallExit:
 			return handleExit(a0);
+		case syscallUnlink:
+			return handleUnlink (a0); // I think a0 is the name address of the file to be deleted, please confirm. 
 
 		default:
 			Lib.debug(dbgProcess, "Unknown syscall " + syscall);
