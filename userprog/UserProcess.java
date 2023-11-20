@@ -444,6 +444,40 @@ public class UserProcess {
 	 * @return the value to be returned to the user.
 	 */
 
+	private int descriptorHelper(int fileDescriptor) {
+		for(int i = 0; i < 16; i++) {
+			if(fileDescArray[i] == null) {
+				fileDescriptor = i;
+				break;
+			}
+		}
+		return fileDescriptor;
+	}
+	
+	private int handleCreate(int fileAddress) {
+		String filename = null;
+		filename = readVirtualMemoryString(fileAddress, 256);
+		
+		if(filename == null) {		// if filename is invalid
+			return -1;
+		}
+		// iterate through list of descriptors using a helper function
+		int fileDescriptor = -1;
+		fileDescriptor = descriptorHelper(fileDescriptor);
+		
+		if (fileDescriptor == -1) {
+			return -1;
+		}
+		
+		OpenFile file = null;
+		file = ThreadedKernel.fileSystem.open(filename, true);			// create new file
+		if (file == null) {													// if call to open method file fails
+			return -1;
+		}
+		return fileDescriptor;
+		
+	}
+
 	private int handleUnlink(int nameAddress) {
 		   String fileName = readVirtualMemoryString(nameAddress, 256); // the max char limit
 		   if (fileName == null) {
