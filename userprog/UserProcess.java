@@ -600,7 +600,7 @@ public class UserProcess {
 		case syscallOpen:
 			return handleOpen(a0);
 		case syscallRead:
-			return handleRead(a0,a1,a2)
+			return handleRead(a0,a1,a2);
 
 		default:
 			Lib.debug(dbgProcess, "Unknown syscall " + syscall);
