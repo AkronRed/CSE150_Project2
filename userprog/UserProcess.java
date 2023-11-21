@@ -558,6 +558,9 @@ public class UserProcess {
 		byte[] full = new byte[size];
 		int readNum = 0;
 		OpenFile file = fileDescArray[fd];
+		if(file == null) {
+			return 1;
+		}
 		while(readNum<size) {
 			int bytesReading = file.read(readNum,full,buffer,size);
 			if(bytesReading == -1) {
