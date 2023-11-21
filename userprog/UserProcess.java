@@ -574,7 +574,7 @@ public class UserProcess {
 		return readNum;
 	}
 
-	private handleWrite(int fd, int address, int size){
+	private int handleWrite(int fd, int address, int size){
 		if((fd < 0 || fd > 15) || (size < 0)){
 			return -1;
 		}
