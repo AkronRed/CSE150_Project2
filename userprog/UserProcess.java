@@ -30,7 +30,7 @@ public class UserProcess {
 			pageTable[i] = new TranslationEntry(i, i, true, false, false, false);
 
 		/*User Code - create array of file descriptors*/
-		OpenFile[] fileDescArray = new OpenFile[16];            // create array 
+		fileDescArray = new OpenFile[16];            // create array 
 		fileDescArray[0] = UserKernel.console.openForReading();
 		fileDescArray[1] =  UserKernel.console.openForWriting();
 	}
