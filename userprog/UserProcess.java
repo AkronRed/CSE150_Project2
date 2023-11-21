@@ -550,7 +550,7 @@ public class UserProcess {
 		if(size<0) {
 			return -1; //invalid file its empty
 		}
-		if(fd>=16||fd<0) {
+		if(fd>15||fd<0) {
 			return -1;
 		}
 		byte[] buffTest = new byte[1];
