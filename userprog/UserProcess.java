@@ -484,7 +484,7 @@ public class UserProcess {
 	private int handleUnlink(int nameAddress) {
 		   String fileName = readVirtualMemoryString(nameAddress, 256); // the max char limit
 		   if (fileName == null) {
-		       return 1; // didn't pass in a filename
+		       return -1; // didn't pass in a filename
 		   }
 		   ThreadedKernel.fileSystem.remove(fileName); // default remove method
 		   return 0; // success
@@ -548,10 +548,10 @@ public class UserProcess {
 	}
 	private int handleRead(int fd, int buffer, int size) {
 		if(size<0) {
-			return 1; //invalid file its empty
+			return -1; //invalid file its empty
 		}
-		if(fd>15||fd<0) {
-			return 1;
+		if(fd>=16||fd<0) {
+			return -1;
 		}
 		byte[] buffTest = new byte[1];
 		if(readVirtualMemory(buffer,buffTest,0,1) != 1) {
@@ -561,17 +561,17 @@ public class UserProcess {
 		int readNum = 0;
 		OpenFile file = fileDescArray[fd];
 		if(file == null) {
-			return 1;
+			return -1;
 		}
 		while(readNum<size) {
 			int bytesReading = file.read(readNum,full,buffer,size);
 			if(bytesReading == -1) {
-				return 1;
+				return -1;
 			}
 			readNum+=bytesReading;
 		}
 		if(writeVirtualMemory(buffer,full,0,readNum)!= readNum){
-			return 1;
+			return -1;
 		}
 		return readNum;
 	}
