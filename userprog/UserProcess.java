@@ -544,6 +544,32 @@ public class UserProcess {
 		fileDescArray[fileDescriptor] = file;
 		return fileDescriptor;
 	}
+	private int handleRead(int fd, int buffer, int size) {
+		if(size<0) {
+			return 1; //invalid file its empty
+		}
+		if(fd>15||fd<0) {
+			return 1;
+		}
+		byte[] buffTest = new byte[1];
+		if(readVirtualMemory(buffer,buffTest,0,1) != 1) {
+			return 1;
+		}
+		byte[] full = new byte[size];
+		int readNum = 0;
+		OpenFile file = fileDescArray[fd];
+		while(readNum<size) {
+			int bytesReading = file.read(readNum,full,buffer,size);
+			if(bytesReading == -1) {
+				return 1;
+			}
+			readNum+=bytesReading;
+		}
+		if(writeVirtualMemory(buffer,full,0,readNum)!= readNum){
+			return 1;
+		}
+		return readNum;
+	}
 
 	public int handleSyscall(int syscall, int a0, int a1, int a2, int a3) {
 		switch (syscall) {
@@ -557,6 +583,8 @@ public class UserProcess {
 			return handleClose(a0);
 		case syscallOpen:
 			return handleOpen(a0);
+		case syscallRead:
+			return handleRead(a0,a1,a2)
 
 		default:
 			Lib.debug(dbgProcess, "Unknown syscall " + syscall);
