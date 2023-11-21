@@ -555,7 +555,7 @@ public class UserProcess {
 		}
 		byte[] buffTest = new byte[1];
 		if(readVirtualMemory(buffer,buffTest,0,1) != 1) {
-			return 1;
+			return -1;
 		}
 		byte[] full = new byte[size];
 		int readNum = 0;
@@ -564,7 +564,7 @@ public class UserProcess {
 			return -1;
 		}
 		while(readNum<size) {
-			int bytesReading = file.read(readNum,full,buffer,size);
+			int bytesReading = file.read(full,readNum,size-readNum);
 			if(bytesReading == -1) {
 				return -1;
 			}
@@ -574,7 +574,6 @@ public class UserProcess {
 			return -1;
 		}
 		return readNum;
-	}
 
 	private int handleWrite(int fd, int address, int size){
 		if((fd < 0 || fd > 15) || (size < 0)){
