@@ -574,6 +574,17 @@ public class UserProcess {
 		return readNum;
 	}
 
+	private handleWrite(int fd, int address, int size){
+		if((fd < 0 || fd > 15) || (size < 0)){
+			return -1;
+		}
+		OpenFile file = fileDescArray[fd];
+		byte[] buffer = new byte[size];
+    		int read = readVirtualMemory(address, buffer, 0, size);
+    		int bytesWritten = file.write(buffer, 0, read);
+    		return bytesWritten;
+	}
+
 	public int handleSyscall(int syscall, int a0, int a1, int a2, int a3) {
 		switch (syscall) {
 		case syscallHalt:
