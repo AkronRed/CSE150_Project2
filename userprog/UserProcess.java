@@ -602,6 +602,8 @@ public class UserProcess {
 			return handleRead(a0,a1,a2);
 		case syscallCreate:
 			return handleCreate(a0);
+		case syscallWrite:
+			return handleWrite(a0,a1,a2);	
 
 		default:
 			Lib.debug(dbgProcess, "Unknown syscall " + syscall);
